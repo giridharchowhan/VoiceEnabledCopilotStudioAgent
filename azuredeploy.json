@@ -40,16 +40,13 @@
       "apiVersion": "2022-07-01",
       "name": "voiceAssistantKeyVault",
       "location": "[resourceGroup().location]",
-      "properties": {
-        "sku": {
-          "name": "standard"
-        },
-        "tenantId": "[subscription().tenantId]",
-        "accessPolicies": []
-      },
       "sku": {
         "family": "A",
         "name": "standard"
+      },
+      "properties": {
+        "tenantId": "[subscription().tenantId]",
+        "accessPolicies": []
       }
     },
     {
