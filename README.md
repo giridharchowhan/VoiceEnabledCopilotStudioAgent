@@ -13,7 +13,7 @@ This project showcases a secure, browser-based voice assistant built with:
 
 Click below to deploy the complete solution to your own Azure subscription:
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https://raw.githubusercontent.com/giridharchowhan/VoiceEnabledCopilotStudioAgent/main/azuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)]([https://portal.azure.com/#create/Microsoft.Template/uri/https://raw.githubusercontent.com/giridharchowhan/VoiceEnabledCopilotStudioAgent/main/azuredeploy.json](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgiridharchowhan%2FVoiceEnabledCopilotStudioAgent%2Fmain%2Fazuredeploy.json))
 
 ---
 
