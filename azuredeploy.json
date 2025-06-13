@@ -51,7 +51,7 @@
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2022-07-01",
-      "name": "voiceAssistantKeyVault/speechKey",
+      "name": "[format('{0}/{1}', 'voiceAssistantKeyVault', 'speechKey')]",
       "properties": {
         "value": "[parameters('speechKey')]"
       },
@@ -62,7 +62,7 @@
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2022-07-01",
-      "name": "voiceAssistantKeyVault/speechRegion",
+      "name": "[format('{0}/{1}', 'voiceAssistantKeyVault', 'speechRegion')]",
       "properties": {
         "value": "[parameters('speechRegion')]"
       },
@@ -73,7 +73,7 @@
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2022-07-01",
-      "name": "voiceAssistantKeyVault/directLineSecret",
+      "name": "[format('{0}/{1}', 'voiceAssistantKeyVault', 'directLineSecret')]",
       "properties": {
         "value": "[parameters('directLineSecret')]"
       },
@@ -84,7 +84,7 @@
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2022-07-01",
-      "name": "voiceAssistantKeyVault/copilotIframeSrc",
+      "name": "[format('{0}/{1}', 'voiceAssistantKeyVault', 'copilotIframeSrc')]",
       "properties": {
         "value": "[parameters('copilotIframeSrc')]"
       },
