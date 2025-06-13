@@ -46,6 +46,10 @@
         },
         "tenantId": "[subscription().tenantId]",
         "accessPolicies": []
+      },
+      "sku": {
+        "family": "A",
+        "name": "standard"
       }
     },
     {
