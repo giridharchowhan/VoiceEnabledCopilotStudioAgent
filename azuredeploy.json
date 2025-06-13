@@ -45,8 +45,7 @@
         "name": "standard"
       },
       "properties": {
-        "tenantId": "[subscription().tenantId]",
-        "accessPolicies": []
+        "tenantId": "[subscription().tenantId]"
       }
     },
     {
