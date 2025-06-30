@@ -1,18 +1,22 @@
-# 🔊 Voice-Enabled Copilot Studio Agent
+# 🎙️ Voice-Enabled Copilot Studio Agent
 
-This project showcases a secure, browser-based voice assistant built with:
-
-- 🎙️ **Azure Speech Services**
-- 🤖 **Microsoft Copilot Studio**
-- 🌐 **Azure Static Web Apps**
-- 🔐 **Azure Key Vault**
+This project lets you deploy a fully serverless, voice-enabled web assistant powered by:
+- **Azure Speech Services**
+- **Copilot Studio (Direct Line)**
+- **Azure Static Web Apps**
+- **Azure Key Vault (for secure secrets)**
 
 ---
 
-## 🚀 Try it yourself
+## 🚀 One-Click Deployment (No GitHub Needed!)
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgiridharchowhan%2FVoiceEnabledCopilotStudioAgent%2Fmain%2Fazuredeploy_blog_ready.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgiridharchowhan%2FVoiceEnabledCopilotStudioAgent%2Fmain%2Fazuredeploy_voicecopilot_full.json)
 
+This button will:
+- ✅ Create a Static Web App
+- ✅ Upload the embedded HTML/JS voice assistant
+- ✅ Store secrets in your Key Vault
+- ✅ Provide a live URL you can share or customize
 ### ✅ What You'll Need
 - Your Azure Speech Key + Region
 - Your Direct Line Channel Secret (from Copilot Studio)
