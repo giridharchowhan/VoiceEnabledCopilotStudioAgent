@@ -2,108 +2,61 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "speechKey": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Your Azure Speech Service Key"
-      }
-    },
-    "speechRegion": {
+    "speechKey": { "type": "securestring" },
+    "speechRegion": { "type": "string" },
+    "directLineSecret": { "type": "securestring" },
+    "copilotIframeSrc": { "type": "string" },
+    "repositoryUrl": {
       "type": "string",
-      "metadata": {
-        "description": "Your Azure Speech Region (e.g., eastus)"
-      }
-    },
-    "directLineSecret": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Your Direct Line Channel Secret from Copilot Studio"
-      }
-    },
-    "copilotIframeSrc": {
-      "type": "string",
-      "metadata": {
-        "description": "The Copilot Studio embed iframe src URL"
-      }
+      "defaultValue": "https://github.com/giridharchowhan/VoiceEnabledCopilotStudioAgent"
     }
   },
   "resources": [
     {
-      "type": "Microsoft.KeyVault/vaults",
-      "apiVersion": "2022-07-01",
-      "name": "voiceAssistantKeyVault",
-      "location": "eastus",
-      "sku": {
-        "family": "A",
-        "name": "Standard"
-      },
-      "properties": {
-        "tenantId": "[subscription().tenantId]",
-        "accessPolicies": [],
-        "enabledForDeployment": false,
-        "enabledForTemplateDeployment": false,
-        "enabledForDiskEncryption": false,
-        "enableRbacAuthorization": true,
-        "publicNetworkAccess": "Enabled",
-        "enableSoftDelete": true,
-        "softDeleteRetentionInDays": 90,
-        "networkAcls": {
-          "defaultAction": "allow",
-          "bypass": "None",
-          "ipRules": [],
-          "virtualNetworkRules": []
-        }
-      }
-    },
-    {
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2022-07-01",
       "name": "[format('{0}/{1}', 'voiceAssistantKeyVault', 'speechKey')]",
-      "properties": {
-        "value": "[parameters('speechKey')]"
-      },
-      "dependsOn": [
-        "Microsoft.KeyVault/vaults/voiceAssistantKeyVault"
-      ]
+      "properties": { "value": "[parameters('speechKey')]" }
     },
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2022-07-01",
       "name": "[format('{0}/{1}', 'voiceAssistantKeyVault', 'speechRegion')]",
-      "properties": {
-        "value": "[parameters('speechRegion')]"
-      },
-      "dependsOn": [
-        "Microsoft.KeyVault/vaults/voiceAssistantKeyVault"
-      ]
+      "properties": { "value": "[parameters('speechRegion')]" }
     },
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2022-07-01",
       "name": "[format('{0}/{1}', 'voiceAssistantKeyVault', 'directLineSecret')]",
-      "properties": {
-        "value": "[parameters('directLineSecret')]"
-      },
-      "dependsOn": [
-        "Microsoft.KeyVault/vaults/voiceAssistantKeyVault"
-      ]
+      "properties": { "value": "[parameters('directLineSecret')]" }
     },
     {
       "type": "Microsoft.KeyVault/vaults/secrets",
       "apiVersion": "2022-07-01",
       "name": "[format('{0}/{1}', 'voiceAssistantKeyVault', 'copilotIframeSrc')]",
+      "properties": { "value": "[parameters('copilotIframeSrc')]" }
+    },
+    {
+      "type": "Microsoft.Web/staticSites",
+      "apiVersion": "2022-03-01",
+      "name": "voiceAssistantStaticWebApp",
+      "location": "[resourceGroup().location]",
+      "sku": { "name": "Free" },
       "properties": {
-        "value": "[parameters('copilotIframeSrc')]"
-      },
-      "dependsOn": [
-        "Microsoft.KeyVault/vaults/voiceAssistantKeyVault"
-      ]
+        "repositoryUrl": "[parameters('repositoryUrl')]",
+        "branch": "main",
+        "buildProperties": {
+          "appLocation": "/",
+          "apiLocation": "api",
+          "outputLocation": "/"
+        }
+      }
     }
   ],
   "outputs": {
-    "keyVaultName": {
+    "staticWebAppUrl": {
       "type": "string",
-      "value": "voiceAssistantKeyVault"
+      "value": "[concat('https://', 'voiceAssistantStaticWebApp', '.azurestaticapps.net')]"
     }
   }
 }
