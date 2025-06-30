@@ -41,11 +41,19 @@
       "name": "voiceAssistantKeyVault",
       "location": "[resourceGroup().location]",
       "properties": {
-        "tenantId": "[subscription().tenantId]"
+        "tenantId": "[subscription().tenantId]",
+        "enabledForDeployment": false,
+        "enabledForTemplateDeployment": false,
+        "enabledForDiskEncryption": false,
+        "enableRbacAuthorization": true,
+        "publicNetworkAccess": "Enabled",
+        "enableSoftDelete": true,
+        "softDeleteRetentionInDays": 90,
+        "accessPolicies": []
       },
       "sku": {
         "family": "A",
-        "name": "standard"
+        "name": "Standard"
       }
     },
     {
