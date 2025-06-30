@@ -1,0 +1,113 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "speechKey": {
+      "type": "securestring"
+    },
+    "speechRegion": {
+      "type": "string"
+    },
+    "directLineSecret": {
+      "type": "securestring"
+    },
+    "copilotIframeSrc": {
+      "type": "string"
+    },
+    "keyVaultName": {
+      "type": "string"
+    },
+    "staticWebAppName": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "eastus"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2022-07-01",
+      "name": "[format('{0}/speechKey', parameters('keyVaultName'))]",
+      "properties": {
+        "value": "[parameters('speechKey')]"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2022-07-01",
+      "name": "[format('{0}/speechRegion', parameters('keyVaultName'))]",
+      "properties": {
+        "value": "[parameters('speechRegion')]"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2022-07-01",
+      "name": "[format('{0}/directLineSecret', parameters('keyVaultName'))]",
+      "properties": {
+        "value": "[parameters('directLineSecret')]"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2022-07-01",
+      "name": "[format('{0}/copilotIframeSrc', parameters('keyVaultName'))]",
+      "properties": {
+        "value": "[parameters('copilotIframeSrc')]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/staticSites",
+      "apiVersion": "2022-03-01",
+      "name": "[parameters('staticWebAppName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Free"
+      },
+      "properties": {
+        "repositoryUrl": "",
+        "branch": "",
+        "buildProperties": {
+          "appLocation": "/",
+          "outputLocation": "/"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deploymentScripts",
+      "apiVersion": "2020-10-01",
+      "name": "uploadStaticZipContent",
+      "location": "[parameters('location')]",
+      "kind": "AzurePowerShell",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/staticSites', parameters('staticWebAppName'))]"
+      ],
+      "properties": {
+        "azPowerShellVersion": "5.9",
+        "timeout": "PT10M",
+        "cleanupPreference": "OnSuccess",
+        "retentionInterval": "P1D",
+        "environmentVariables": [
+          {
+            "name": "RESOURCEGROUP",
+            "value": "[resourceGroup().name]"
+          },
+          {
+            "name": "SITE_NAME",
+            "value": "[parameters('staticWebAppName')]"
+          }
+        ],
+        "scriptContent": "\n$bytes = [System.Convert]::FromBase64String(\"UEsDBBQAAAAIAOS03lrYAYJGxgAAAD4BAAAKAAAAaW5kZXguaHRtbFWQsW4CMQyG93uK/5jaIUTMjW6hSN3KgJAYw8XlIpkYJYaqb18uKZWYbMnfp9925/r3z/XusN1g0jMPnXsU8mHoAKdRmYa9xJGwSf7IFLCWS2RRZ9uwc7bh7ijhp1rTavggZulxkGvGbdYNPeuIBRxvtLzrq2r1xjT+n0hKp+w1SsJ3ZAaLD5goE4ypShlzvOjcAtZiy36kSThQRhvhS/7y4UuJRX3SSo+SijAtWU4vi/0zUHMoLF7f5gz7CHG2HXhfuH7pF1BLAQIUAxQAAAAIAOS03lrYAYJGxgAAAD4BAAAKAAAAAAAAAAAAAACkgQAAAABpbmRleC5odG1sUEsFBgAAAAABAAEAOAAAAO4AAAAAAA==\")\n$tempPath = \"$env:TEMP\\site.zip\"\n[System.IO.File]::WriteAllBytes($tempPath, $bytes)\nPublish-AzStaticWebAppBuildArtifact -ResourceGroupName $env:RESOURCEGROUP -Name $env:SITE_NAME -AppArtifactZipPath $tempPath\n",
+        "forceUpdateTag": "1"
+      }
+    }
+  ],
+  "outputs": {
+    "staticWebAppUrl": {
+      "type": "string",
+      "value": "[concat('https://', parameters('staticWebAppName'), '.azurestaticapps.net')]"
+    }
+  }
+}
