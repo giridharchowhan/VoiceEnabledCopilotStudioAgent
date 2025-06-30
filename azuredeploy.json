@@ -40,6 +40,10 @@
       "apiVersion": "2022-07-01",
       "name": "voiceAssistantKeyVault",
       "location": "[resourceGroup().location]",
+      "sku": {
+        "family": "A",
+        "name": "Standard"
+      },
       "properties": {
         "tenantId": "[subscription().tenantId]",
         "enabledForDeployment": false,
@@ -50,10 +54,6 @@
         "enableSoftDelete": true,
         "softDeleteRetentionInDays": 90,
         "accessPolicies": []
-      },
-      "sku": {
-        "family": "A",
-        "name": "Standard"
       }
     },
     {
