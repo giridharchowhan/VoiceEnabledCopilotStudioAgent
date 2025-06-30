@@ -1,0 +1,92 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "speechKey": {
+      "type": "securestring"
+    },
+    "speechRegion": {
+      "type": "string"
+    },
+    "directLineSecret": {
+      "type": "securestring"
+    },
+    "copilotIframeSrc": {
+      "type": "string"
+    },
+    "repositoryUrl": {
+      "type": "string",
+      "defaultValue": "https://github.com/giridharchowhan/VoiceEnabledCopilotStudioAgent"
+    },
+    "keyVaultName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing Azure Key Vault"
+      }
+    },
+    "staticWebAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Azure Static Web App to deploy"
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2022-07-01",
+      "name": "[format('{0}/{1}', parameters('keyVaultName'), 'speechKey')]",
+      "properties": {
+        "value": "[parameters('speechKey')]"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2022-07-01",
+      "name": "[format('{0}/{1}', parameters('keyVaultName'), 'speechRegion')]",
+      "properties": {
+        "value": "[parameters('speechRegion')]"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2022-07-01",
+      "name": "[format('{0}/{1}', parameters('keyVaultName'), 'directLineSecret')]",
+      "properties": {
+        "value": "[parameters('directLineSecret')]"
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2022-07-01",
+      "name": "[format('{0}/{1}', parameters('keyVaultName'), 'copilotIframeSrc')]",
+      "properties": {
+        "value": "[parameters('copilotIframeSrc')]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/staticSites",
+      "apiVersion": "2022-03-01",
+      "name": "[parameters('staticWebAppName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Free"
+      },
+      "properties": {
+        "repositoryUrl": "[parameters('repositoryUrl')]",
+        "branch": "main",
+        "buildProperties": {
+          "appLocation": "/",
+          "apiLocation": "api",
+          "outputLocation": "/"
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "staticWebAppUrl": {
+      "type": "string",
+      "value": "[concat('https://', parameters('staticWebAppName'), '.azurestaticapps.net')]"
+    }
+  }
+}
